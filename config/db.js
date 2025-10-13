@@ -1,0 +1,15 @@
+//Acceso
+require('dotenv').config()
+//Administrar la BD
+const mysql = require('mysql2/promise')
+
+//Pool Conexiones / Acceso
+const pool = mysql.createPool({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    passsword: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE,
+    port: process.env.DB_PORT
+})
+
+module.exports = pool
