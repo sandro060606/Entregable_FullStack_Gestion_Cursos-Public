@@ -1,0 +1,21 @@
+const express = require('express')
+
+const categoriaRoutes = require('./routes/categoriaRoutes')
+const subcategoriaRoutes = require('./routes/subcategoriaRoutes')
+const docenteRoutes = require('./routes/docenteRoutes')
+
+const app = express()
+const PORT = process.env.PORT || 3000 //Puerto de la App
+
+//Comunicación se realizará JSON
+app.use(express.json())
+
+//Rutas
+app.use('/api/categorias', categoriaRoutes)
+app.use('/api/subcategorias', subcategoriaRoutes)
+app.use('/api/docentes', docenteRoutes)
+
+//Iniciar el servidor
+app.listen(PORT, () => {
+  console.log(`Servidor iniciado http://localhost:${PORT}`)
+})
