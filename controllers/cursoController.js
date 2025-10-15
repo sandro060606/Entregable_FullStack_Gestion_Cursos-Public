@@ -53,28 +53,29 @@ exports.registrarCurso = async (req, res) => {
 exports.obtenerCursos = async (req, res) => {
   const sql = `
         SELECT 
-            cat.nombre AS Categoria_Principal,
-            sub.nombre AS Subcategoria,
-            cur.titulo AS Curso,
-            cur.descripcion AS Descripcion,
-            cur.fecha_inicio,
-            cur.fecha_fin,
-            cur.duracion_horas,
-            cur.precio AS Precio,
-            doc.nombre_completo AS Docente_Asignado
+          cur.id_curso,
+          cur.titulo,
+          cur.descripcion,
+          cat.nombre AS categoria_nombre,
+          sub.nombre AS subcategoria_nombre,
+          doc.nombre_completo AS docente_nombre,
+          cur.fecha_inicio,
+          cur.fecha_fin,
+          cur.duracion_horas,
+          cur.precio
         FROM 
-            curso cur
+          curso cur
         JOIN 
-            subcategoria sub 
-            ON cur.id_subcategoria = sub.id_subcategoria
+          subcategoria sub 
+          ON cur.id_subcategoria = sub.id_subcategoria
         JOIN 
-            categoria cat 
-            ON sub.id_categoria = cat.id_categoria
+          categoria cat 
+          ON sub.id_categoria = cat.id_categoria
         JOIN 
-            docente doc 
-            ON cur.id_docente = doc.id_docente
+          docente doc 
+          ON cur.id_docente = doc.id_docente
         ORDER BY 
-            cur.id_curso DESC;
+          cur.id_curso DESC
         `;
 
   try {
@@ -94,7 +95,7 @@ exports.obtenerCursoPorId = async (req, res) => {
   const { id_curso } = req.params;
 
   const sql =
-    "SELECT id_curso, titulo, descripcion, fecha_inicio, fecha_fin, duracion_horas, precio, id_subcategoria, id_docente FROM curso WHERE id_curso = ?"
+    "SELECT id_curso, titulo, descripcion, fecha_inicio, fecha_fin, duracion_horas, precio, id_subcategoria, id_docente FROM curso WHERE id_curso = ?";
 
   try {
     //Deserialización - PRIMER VALOR DEL ARREGLO
@@ -114,8 +115,16 @@ exports.obtenerCursoPorId = async (req, res) => {
 exports.actualizarCurso = async (req, res) => {
   //Necesitamos un parametro
   const { id_curso } = req.params;
-  const { titulo, descripcion, fecha_inicio, fecha_fin, duracion_horas, precio, id_subcategoria, id_docente } =
-    req.body; //Validación => ES OBLIGATORIO QUE ALMENOS UNO TENGA DATOS
+  const {
+    titulo,
+    descripcion,
+    fecha_inicio,
+    fecha_fin,
+    duracion_horas,
+    precio,
+    id_subcategoria,
+    id_docente,
+  } = req.body; //Validación => ES OBLIGATORIO QUE ALMENOS UNO TENGA DATOS
 
   if (
     !id_curso &&
@@ -171,9 +180,7 @@ exports.actualizarCurso = async (req, res) => {
   } //Construir de manera dinámica la consulta
 
   values.push(id_curso);
-  const sql = `UPDATE curso SET ${sqlParts.join(
-    ", "
-  )} WHERE id_curso = ?`;
+  const sql = `UPDATE curso SET ${sqlParts.join(", ")} WHERE id_curso = ?`;
   try {
     const [result] = await pool.query(sql, values);
 
@@ -208,4 +215,3 @@ exports.eliminarCurso = async (req, res) => {
     res.status(500).json({ mensaje: "Error interno del servidor" });
   }
 };
-
