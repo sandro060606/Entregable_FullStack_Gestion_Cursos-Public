@@ -116,12 +116,12 @@ async function obtenerCursos() {
       const actionCell = row.insertCell();
 
       const editButton = document.createElement("button");
-      editButton.textContent = "Editar";
+      editButton.innerHTML = '<i class="fa-solid fa-pen-to-square"></i>';
       editButton.classList.add("btn", "btn-info", "btn-sm", "me-2");
       editButton.onclick = () => cargarParaEdicion(curso);
 
       const deleteButton = document.createElement("button");
-      deleteButton.textContent = "Eliminar";
+      deleteButton.innerHTML = '<i class="fa-solid fa-trash"></i>';
       deleteButton.classList.add("btn", "btn-danger", "btn-sm");
       deleteButton.onclick = () => eliminarCurso(curso.id_curso, curso.titulo);
 
